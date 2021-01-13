@@ -9,7 +9,7 @@ class Car {
 
   void displayCar() {
     stroke(100);
-    fill(100);
+    fill(255);
     ellipse(pos.x, pos.y, 10, 10);
   }
   

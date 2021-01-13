@@ -3,7 +3,7 @@ class SensorSystem {
   
   //wall detectors
   float sensorMag = 50;
-  float sensorAngle = PI*2/8;
+  float sensorAngle = PI/4;
   
   PVector anchorPos           = new PVector();
   
@@ -27,6 +27,7 @@ class SensorSystem {
   boolean lastGreenDetection;
   int     lastTimeInFrames      = 0;
   int     lapTimeInFrames       = 10000;
+  
 
   void displaySensors() {
     strokeWeight(0.5);
@@ -57,29 +58,30 @@ class SensorSystem {
 
   void updateSensorsignals(PVector pos, PVector vel) {
     //Collision detectors
-    frontSensorSignal = get(int(pos.x+sensorVectorFront.x), int(pos.y+sensorVectorFront.y))==-1?true:false;
-    leftSensorSignal = get(int(pos.x+sensorVectorLeft.x), int(pos.y+sensorVectorLeft.y))==-1?true:false;
-    rightSensorSignal = get(int(pos.x+sensorVectorRight.x), int(pos.y+sensorVectorRight.y))==-1?true:false;  
+    frontSensorSignal = get(int(pos.x+sensorVectorFront.x), int(pos.y+sensorVectorFront.y)) == -1?true:false;
+    leftSensorSignal = get(int(pos.x+sensorVectorLeft.x), int(pos.y+sensorVectorLeft.y)) == -1?true:false;
+    rightSensorSignal = get(int(pos.x+sensorVectorRight.x), int(pos.y+sensorVectorRight.y)) == -1?true:false;  
     //Crash detector
     color color_car_position = get(int(pos.x), int(pos.y));
-    if (color_car_position ==-1) {
-      whiteSensorFrameCount = whiteSensorFrameCount+1;
+    if (color_car_position == -1) {
+      whiteSensorFrameCount += 1;
     }
+    
     //Laptime calculation
     boolean currentGreenDetection =false;
-    if (red(color_car_position)==0 && blue(color_car_position)==0 && green(color_car_position)!=0) {//den grønne målstreg er detekteret
+    if (red(color_car_position) == 0 && blue(color_car_position) == 0 && green(color_car_position) != 0) {//den grønne målstreg er detekteret
       currentGreenDetection = true;
     }
     if (lastGreenDetection && !currentGreenDetection) {  //sidst grønt - nu ikke -vi har passeret målstregen 
-      lapTimeInFrames = frameCount - lastTimeInFrames; //LAPTIME BEREGNES - frames nu - frames sidst
+      lapTimeInFrames = frameCount - lastTimeInFrames; //LAPTIME BEREGNES: frames nu - frames sidst
       lastTimeInFrames = frameCount;
     }   
     lastGreenDetection = currentGreenDetection; //Husker om der var grønt sidst
     //count clockWiseRotationFrameCounter
     centerToCarVector.set((height/2)-pos.x, (width/2)-pos.y);    
-    float currentRotationAngle =  centerToCarVector.heading();
-    float deltaHeading   =  lastRotationAngle - centerToCarVector.heading();
-    clockWiseRotationFrameCounter  =  deltaHeading>0 ? clockWiseRotationFrameCounter + 1 : clockWiseRotationFrameCounter -1;
+    float currentRotationAngle = centerToCarVector.heading();
+    float deltaHeading = lastRotationAngle - centerToCarVector.heading();
+    clockWiseRotationFrameCounter = deltaHeading > 0 ? clockWiseRotationFrameCounter + 1 : clockWiseRotationFrameCounter -1;
     lastRotationAngle = currentRotationAngle;
     
     updateSensorVectors(vel);
@@ -88,7 +90,7 @@ class SensorSystem {
   }
 
   void updateSensorVectors(PVector vel) {
-    if (vel.mag()!=0) {
+    if (vel.mag() != 0) {
       sensorVectorFront.set(vel);
       sensorVectorFront.normalize();
       sensorVectorFront.mult(sensorMag);
