@@ -23,15 +23,15 @@ This process would then be repeated, until all the cars were driving close to op
 
 ### What actually happened
 The group wanted a function, that could find the weights/biases of the best cars and therefore made a function for it. It ended up working as inteded and started printing the weights/biases of all the good cars that were found in the consol. Afterwards they desided to utilize the part of the function, that found the good cars, to then weed out the bad cars, since the bad cars were being found anyway. Below is the if-statement that checked, if a car was good or not. </br>
-![The if-statement for checking good cars](billeder/FindingGoodCars.png)
+![The if-statement for checking good cars](billeder/FindingGoodCars.png) </br>
 However, due to the bad cars being removed, even though new cars were being added in in the very same frame, just a couple lines after removal, the group experienced problems with indexes going out-of-bounds. A group member had the idea of, instead of removing bad cars, only to add in new cars, that would be given the good weights and biases of the good cars, the bad cars wouldn't be removed, but *they* would be given the good weights/biases. It would thereby not be necessary to remove any cars at all. </br>
 Though this seemed like a good plan at first, a new problem arose with the way good cars were chosen; if a good car was found, then the car would be added to another arraylist called "goodCars" in order to save it (and along with it; it's weights and biases). When a bad car was found, then it would be given the good weights and biases, using a good car from the goodCars-arraylist. </br>
 The problem is, though, that if a good car wasn't found as the first car, the program looked at, then no good cars would exist in the arralyst, and non-existant weights/biases would be attempted to be given to a bad car. This is what *was believed* to be the issue, though it was never actually tested to confirm it, due to this being a core part of the function. Therefore a few if/else-statements were used, to try solving this possible cause of the issue; </br>
 Firstly, if a good car was not found, the function would check if there had been found any other good cars, by checking if the goodCars-arraylist's size was above 0. If so, the weights/biases would be added to the bad car found. if not, then the bad car in question, would be removed. A final if-statement was used to check, if there were no more cars left (i.e. all cars had been doing poorly, and so were all removed). If so, then there would be added as many new cars, as the population was set to, in order to create a brand new population. Below is the code for this attempted fix: </br>
-![The attempted fix](billeder/AttemptedFix.png)
+![The attempted fix](billeder/AttemptedFix.png) </br>
 This did not work either, however. Instead a completely new and unexpected IndexOutOfBoundsException was given. This time for the if-statement, that checked if a car was good or not: </br>
 ![The location of the error](billeder/ErrorLocation.png) </br>
-
+And below here is the error itself: </br>
 ![The error itself](billeder/Exception.png) </br>
 Through a bit of testing and help from others, it was determined that the exception was equal to half of the population; with a population of 100, 50 would be out of bounds, even though the for-loop, in which the if-statement was situated, kept going as long as a temporary variable for the index was smaller than the size of the population. This meant that the CarControllerList-arraylist was changing while the for-loop was running, resulting in this new out-of-bounds exception.
 
