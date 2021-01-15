@@ -9,7 +9,7 @@ PImage trackImage;
 
 void setup() {
   size(500, 600);
-  
+
   trackImage = loadImage("track.png");
 }
 
@@ -21,14 +21,15 @@ void draw() {
   carSystem.updateAndDisplay();
 
   //TESTKODE: Frastortering af dårlige biler, for hver gang der går 200 frame - f.eks. dem der kører uden for banen
-  //if (frameCount % 300 == 0) {
+  if (frameCount % 400 == 0) {
     //println("FJERN DEM DER KØRER UDENFOR BANEN frameCount: " + frameCount);
     //for (int i = carSystem.CarControllerList.size()-1; i >= 0; i--) {
     //  SensorSystem s = carSystem.CarControllerList.get(i).sensorSystem;
-    //  if (s.whiteSensorFrameCount > 0) {
+    //  if (s.whiteSensorFrameCount > 0 || s.clockWiseRotationFrameCounter < 255) {
     //    carSystem.CarControllerList.remove(carSystem.CarControllerList.get(i));
     //  }
-    carSystem.getWeights();
-    //noLoop();
-  //}
-}
+      carSystem.createGeneration();
+      //noLoop();
+    }
+  }
+//}
