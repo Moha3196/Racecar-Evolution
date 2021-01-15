@@ -27,7 +27,7 @@ class CarSystem {
   }
 
 
-  void createGeneration() {  //function for almost everything about making a new generation
+  void createNewGeneration() {  //function for almost everything about making a new generation
     for (int i = 0; i < populationSize; i++) {
       if (CarControllerList.get(i).sensorSystem.clockWiseRotationFrameCounter >= 255  &&  //this statement only takes the best cars - those with a high green-value 
           CarControllerList.get(i).sensorSystem.whiteSensorFrameCount == 0  &&  //that haven't gone outside the track, 
@@ -42,28 +42,27 @@ class CarSystem {
         //fill(0, 255, 0);
         //circle(CarControllerList.get(i).bil.pos.x, CarControllerList.get(i).bil.pos.y, 50);
       }
-      else if (goodCars.size() > 0) {
+      else if (goodCars.size() > 0) {  //uses weights/biases from goodCars, only if any good cars have been found
         //CarControllerList.remove(CarControllerList.get(i));
-        //badCars++;
 
-        for (int j = 0; j < CarControllerList.get(i).hjerne.weights.length; j++) {
-          CarControllerList.get(i).hjerne.weights[j] = goodCars.get(j).hjerne.weights[j];
+        for (int j = 0; j < CarControllerList.get(i).hjerne.weights.length; j++) {  //weights.length is always 8, no matter the car in question. This is therefore like "j < 8"
+          CarControllerList.get(i).hjerne.weights[j] = goodCars.get(j).hjerne.weights[j];  //sets the weights/biases of the bad car to be the same as the good car
           if (j < 3) {
             CarControllerList.get(i).hjerne.weights[j] = goodCars.get(j).hjerne.biases[j];
           }
         }
       }
       else {
-        CarControllerList.remove(CarControllerList.get(i));
+        CarControllerList.remove(CarControllerList.get(i));  //simply removes the bad car, if there are no good cars to get good weights/biases from
       }
-      if (CarControllerList.size() == 0) {
+      if (CarControllerList.size() == 0) {  //if there are no more cars left at all, then creates an entirely new population
         for (int c = 0; c < populationSize; c++) {
           CarController controller = new CarController();
           CarControllerList.add(controller);
         }
       }
 
-      //code for printing good weights+biases
+      //code for printing good weights/biases
       for (int j = 0; j < CarControllerList.get(i).hjerne.weights.length; j++) {
         int b = j+1;
         println("Weigh " + b + " for Car " + i + " is: " + CarControllerList.get(i).hjerne.weights[j]);
