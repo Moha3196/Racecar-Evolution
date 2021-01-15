@@ -31,6 +31,7 @@ Firstly, if a good car was not found, the function would check if there had been
 ![The attempted fix](billeder/AttemptedFix.png)
 This did not work either, however. Instead a completely new and unexpected IndexOutOfBoundsException was given. This time for the if-statement, that checked if a car was good or not: </br>
 ![The location of the error](billeder/ErrorLocation.png) </br>
+
 ![The error itself](billeder/Exception.png) </br>
 Through a bit of testing and help from others, it was determined that the exception was equal to half of the population; with a population of 100, 50 would be out of bounds, even though the for-loop, in which the if-statement was situated, kept going as long as a temporary variable for the index was smaller than the size of the population. This meant that the CarControllerList-arraylist was changing while the for-loop was running, resulting in this new out-of-bounds exception.
 
